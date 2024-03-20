@@ -8,15 +8,27 @@ import Nuke
 
 class ViewController: UIViewController, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        return posts.count // Return number of posts for number of rows
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
-    }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TumblrPostCell", for: indexPath) as! TumblrPostCell
+                let post = posts[indexPath.row]
+                cell.postLabel.text = post.summary
+                if let photo = post.photos.first {
+              let url = photo.originalSize.url
+               
+                    Nuke.loadImage(with: url, into: cell.postImageView)
+                }
+                
+                return cell
+            }
     
 
     @IBOutlet weak var tableView: UITableView!
+    
+    var posts: [Post] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +62,8 @@ class ViewController: UIViewController, UITableViewDataSource {
                 let blog = try JSONDecoder().decode(Blog.self, from: data)
 
                 DispatchQueue.main.async { [weak self] in
-
+                    self?.posts = blog.response.posts // Assign fetched posts to posts array
+                    self?.tableView.reloadData() // Reload table view to display fetched data
                     let posts = blog.response.posts
 
 
