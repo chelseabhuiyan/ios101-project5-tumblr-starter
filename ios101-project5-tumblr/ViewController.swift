@@ -29,17 +29,25 @@ class ViewController: UIViewController, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
     
     var posts: [Post] = []
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        refreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
 
+            // Add refresh control to table view
+            tableView.addSubview(refreshControl)
         tableView.dataSource = self
         
         fetchPosts()
     }
 
 
-
+    @objc func refreshData() {
+        // Perform data fetching or refreshing operation here
+        fetchPosts()
+    }
+    
     func fetchPosts() {
         let url = URL(string: "https://api.tumblr.com/v2/blog/humansofnewyork/posts/photo?api_key=1zT8CiXGXFcQDyMFG7RtcfGLwTdDjFUJnZzKJaWTmgyK4lKGYk")!
         let session = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -64,6 +72,7 @@ class ViewController: UIViewController, UITableViewDataSource {
                 DispatchQueue.main.async { [weak self] in
                     self?.posts = blog.response.posts // Assign fetched posts to posts array
                     self?.tableView.reloadData() // Reload table view to display fetched data
+                    self?.refreshControl.endRefreshing()
                     let posts = blog.response.posts
 
 
