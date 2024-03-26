@@ -24,7 +24,7 @@ The following **additional** features are implemented:
 - [ ] List anything else that you can get done to improve the app functionality!
 
 ## Video Walkthrough
-
+https://www.loom.com/share/4a5212438fff42c3b41187a2f2ee4469?sid=cf47f8be-058d-447f-ae71-d273326dcead
 
 ## Notes
 The instructions were clear and easy to follow.
